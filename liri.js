@@ -78,13 +78,13 @@ function getSpotify() {
         secret: process.env.SPOTIFY_SECRET
     });
 
-    spotifyThis.search({ type: 'track', query: 'Thriller' }, function(error, data) {
+    spotifyThis.search({ type: 'track', query: 'Thriller', limit: 1 }, function(error, data) {
         if (error) {
             console.log('Error occurred: ' + error);
             return;
         }
         else {
-            console.log(data);
+            console.log(data.tracks.items[0].album.artists[0].name);
         }
 });
 };  
