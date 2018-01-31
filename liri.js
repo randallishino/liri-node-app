@@ -21,7 +21,7 @@ var options = [
 var command = process.argv[2];
 
 
-// conditionals to check for which 
+// conditionals to check for which command entered
 function commandCheck() {
     if (command === 'my-tweets') {
         tweets();
@@ -72,19 +72,23 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 
 
 function getSpotify() {
+
+    var song = process.argv[3];
     
     var spotifyThis = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
 
-    spotifyThis.search({ type: 'track', query: 'Thriller', limit: 1 }, function(error, data) {
+    spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
         if (error) {
             console.log('Error occurred: ' + error);
             return;
         }
         else {
-            console.log(data.tracks.items[0].album.artists[0].name);
+            // console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
+            // console.log("Song name: " + data.tracks.items[0].name);
+            console.log("Preview link: " + data.tracks.items[0].album.external_urls.spotify);
         }
 });
 };  
