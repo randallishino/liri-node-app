@@ -30,7 +30,7 @@ function commandCheck() {
         getSpotify();
     }
     else if(command === 'movie-this') {
-
+        OMDB();
     }
     else if(command === 'do-what-it-says'){
 
@@ -54,8 +54,9 @@ var params = {screen_name: 'NBA'};
 
 // twitter method for a get response
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
-    if (!error) {
+    if (!error && response.statusCode === 200) {
 
+    // looping and getting 20 tweets
     for (var i = 0; i < 20; i++) {
       var text = tweets[i].text;
       var time = tweets[i].created_at;
@@ -64,6 +65,7 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
       console.log('----------');
     }
 }
+    // error handling
     else {
         console.log(error);
     }
@@ -71,20 +73,27 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 };
 
 
+// searching a spotify song
 function getSpotify() {
 
     var song = process.argv[3];
     
+    // spotify token
     var spotifyThis = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
 
+
+    // spotify's npm method 
     spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
+
+       // error handling
         if (error) {
             console.log('Error occurred: ' + error);
             return;
         }
+        // logging song info
         else {
             console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
             console.log("Song name: " + data.tracks.items[0].name);
@@ -94,10 +103,35 @@ function getSpotify() {
 });
 }; 
 
-
+// get movie
 function OMDB() {
-    
-}
+    var movie = process.argv[3];
+    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+
+    // var twoWordMovie = process.argv[3] + process.argv[4];
+    request(queryUrl, function(error, response, body) {
+        if(!error & response.statusCode === 200){
+            console.log(queryUrl);
+            console.log(JSON.parse(body));
+            console.log("Title: " + JSON.parse(body).Title);
+            console.log("-----------");
+            console.log("Year Released: " + JSON.parse(body).Year);
+            console.log("-----------");
+            console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+            console.log("-----------");
+            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+            console.log("-----------");
+            console.log("Produced in: " + JSON.parse(body).Country);
+            console.log("-----------");
+            console.log("Language: " + JSON.parse(body).Language);
+            console.log("-----------");
+            console.log("Movie Plot: " + JSON.parse(body).Plot);
+            console.log("-----------");
+            console.log("Actors/Actresses: " + JSON.parse(body).Actors);
+        }
+    });
+};
+
 
 
 
