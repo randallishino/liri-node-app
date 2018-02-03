@@ -84,31 +84,31 @@ function getSpotify() {
         secret: process.env.SPOTIFY_SECRET
     });
 
-
-    // spotify's npm method 
-    spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
-
        // error handling
-        if (error) {
-            console.log('Error occurred: ' + error);
-            return;
-        }
-        // logging song info
-        else {
+        if (song) {
+            spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
             console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
             console.log("Song name: " + data.tracks.items[0].name);
             console.log("Preview link: " + data.tracks.items[0].album.external_urls.spotify);
             console.log("Album name: " + data.tracks.items[0].album.name);
-        }
-});
-}; 
+        });
+    }
+    else {
+            spotifyThis.search({ type: 'track', query:"The Sign",}, function(error, data) {
+                console.log("Artist: " + data.tracks.items[5].album.artists[0].name);
+                console.log("Song name: " + data.tracks.items[5].name);
+                console.log("Preview link: " + data.tracks.items[5].album.external_urls.spotify);
+                console.log("Album name: " + data.tracks.items[5].album.name);
+            });
+    };
+};
 
 // get movie
 function OMDB() {
     var movie = process.argv[3];
     var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
 
-    // var twoWordMovie = process.argv[3] + process.argv[4];
+    // getting info from OMDB
     request(queryUrl, function(error, response, body) {
         if(!error & response.statusCode === 200){
             console.log(queryUrl);
@@ -128,6 +128,9 @@ function OMDB() {
             console.log("Movie Plot: " + JSON.parse(body).Plot);
             console.log("-----------");
             console.log("Actors/Actresses: " + JSON.parse(body).Actors);
+        }
+        else {
+            console.log(error);
         }
     });
 };
