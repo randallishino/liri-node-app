@@ -33,15 +33,15 @@ function commandCheck() {
         OMDB();
     }
     else if(command === 'do-what-it-says'){
-
+        file();
     }
-}
+};
 
 
 //getting tweets
 function tweets() {
 
-    // twitter keys/access tokens
+    // constructor with twitter keys/access tokens
     var client = new Twitter({
         consumer_key: process.env.TWITTER_CONSUMER_KEY,
         consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -78,7 +78,7 @@ function getSpotify() {
 
     var song = process.argv[3];
     
-    // spotify token
+    // constructor with spotify tokens
     var spotifyThis = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
@@ -88,16 +88,24 @@ function getSpotify() {
         if (song) {
             spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
             console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
+            console.log("-----------");
             console.log("Song name: " + data.tracks.items[0].name);
+            console.log("-----------");
             console.log("Preview link: " + data.tracks.items[0].album.external_urls.spotify);
+            console.log("-----------");
             console.log("Album name: " + data.tracks.items[0].album.name);
         });
     }
+
+    // if no track entered, default to "The Sign by Ace of Base"
     else {
-            spotifyThis.search({ type: 'track', query:"The Sign",}, function(error, data) {
+            spotifyThis.search({ type: 'track', query: "The Sign",}, function(error, data) {
                 console.log("Artist: " + data.tracks.items[5].album.artists[0].name);
+                console.log("-----------");
                 console.log("Song name: " + data.tracks.items[5].name);
+                console.log("-----------");
                 console.log("Preview link: " + data.tracks.items[5].album.external_urls.spotify);
+                console.log("-----------");
                 console.log("Album name: " + data.tracks.items[5].album.name);
             });
     };
@@ -130,6 +138,8 @@ function OMDB() {
             console.log("Actors/Actresses: " + JSON.parse(body).Actors);
         });
     }
+
+        // if no movie entered, default to "Mr.Nobody"
         else {
             queryUrl = "http://www.omdbapi.com/?t=" + "Mr.Nobody"+ "&y=&plot=short&apikey=trilogy";
             request(queryUrl, function(error, response, body) {
@@ -152,6 +162,21 @@ function OMDB() {
             console.log("Actors/Actresses: " + JSON.parse(body).Actors);
             });
         };
+    };
+
+    // read info from local file
+    function file() {
+        fs.readFile("random.txt","utf-8",function(error,data) {
+            if (error) {
+                return console.log(error);
+            }
+
+            // making it more readable
+            else {
+                var arr = data.trim().split(",");
+                console.log(arr);
+            }
+        });
     };
 
 
