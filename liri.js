@@ -15,8 +15,6 @@ var options = [
 ];
 
 
-
-
 // command will be this argument
 var command = process.argv[2];
 
@@ -111,6 +109,7 @@ function getSpotify() {
     };
 };
 
+
 // get movie
 function OMDB() {
     var movie = process.argv[3];
@@ -164,6 +163,8 @@ function OMDB() {
         };
     };
 
+
+
     // read info from local file
     function file() {
         fs.readFile("random.txt","utf-8",function(error,data) {
@@ -178,9 +179,5 @@ function OMDB() {
             }
         });
     };
-
-
-
-
 
 commandCheck();
