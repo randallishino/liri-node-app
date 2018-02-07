@@ -81,8 +81,6 @@ function getSpotify() {
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
-
-       // error handling
         if (song) {
             spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
             console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
@@ -180,4 +178,5 @@ function OMDB() {
         });
     };
 
+// calling our argument check
 commandCheck();
