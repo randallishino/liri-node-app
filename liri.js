@@ -14,11 +14,19 @@ var options = [
     'do-what-it-says'
 ];
 
-    // constructor with spotify tokens
+    // new instance with spotify tokens
  var spotifyThis = new Spotify({
     id: process.env.SPOTIFY_ID,
     secret: process.env.SPOTIFY_SECRET
     });
+
+       // new instance with twitter keys/access tokens
+var client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+      });
 
 // command will be this argument
 var command = process.argv[2];
@@ -44,16 +52,10 @@ function commandCheck() {
 //getting tweets
 function tweets() {
 
-    // constructor with twitter keys/access tokens
-    var client = new Twitter({
-        consumer_key: process.env.TWITTER_CONSUMER_KEY,
-        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-        access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-        access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-      });
-      
+    var search = process.argv[3];
+
       // screen name to search
-var params = {screen_name: 'NBA'};
+var params = {screen_name: search};
 
 // twitter method for a get response
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
