@@ -14,6 +14,11 @@ var options = [
     'do-what-it-says'
 ];
 
+    // constructor with spotify tokens
+ var spotifyThis = new Spotify({
+    id: process.env.SPOTIFY_ID,
+    secret: process.env.SPOTIFY_SECRET
+    });
 
 // command will be this argument
 var command = process.argv[2];
@@ -75,12 +80,7 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 function getSpotify() {
 
     var song = process.argv[3];
-    
-    // constructor with spotify tokens
-    var spotifyThis = new Spotify({
-        id: process.env.SPOTIFY_ID,
-        secret: process.env.SPOTIFY_SECRET
-    });
+
         if (song) {
             spotifyThis.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
             console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
@@ -174,9 +174,18 @@ function OMDB() {
             else {
                 var arr = data.trim().split(",");
                 console.log(arr);
-            }
-        });
-    };
+                spotifyThis.search({ type: 'track', query: "I want it that way",}, function(error, data) {
+                    console.log("Artist name: " + data.tracks.items[0].album.artists[0].name);
+                    console.log("-----------");
+                    console.log("Song name: " + data.tracks.items[0].name);
+                    console.log("-----------");
+                    console.log("Preview link: " + data.tracks.items[0].album.external_urls.spotify);
+                    console.log("-----------");
+                    console.log("Album name: " + data.tracks.items[0].album.name);
+            });
+        }
+    });
+};
 
 // calling our argument check
 commandCheck();
